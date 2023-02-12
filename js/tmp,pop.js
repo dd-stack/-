@@ -77,26 +77,27 @@ function onGeoOk(position){
     const hours = ('0' + date.getHours()).slice(-2);
     const minutes = ('0' + date.getMinutes()).slice(-2);
     const time = Number(hours + minutes);  //현재 시간
-    let standardTime = 0;
+    console.log(time)
+    let standardTime = '';  //왜 숫자로 할당하면 오류가 발생할까?
     if(210 <= time && time < 510){
-        standardTime = 0200;
+        standardTime = '0200';
     } else if(510 <= time && time < 810){
-        standardTime = 0500;
+        standardTime = '0500';
     } else if(810 <= time && time < 1110){
-        standardTime = 0800;
+        standardTime = '0800';
     } else if(1110 <= time && time < 1410){
-        standardTime = 1100;
+        standardTime = '1100';
     } else if(1410 <= time && time < 1710){
-        standardTime = 1400;
+        standardTime = '1400';
     } else if(1710 <= time && time < 2010){
-        standardTime = 1700;
+        standardTime = '1700';
     } else if(2010 <= time && time < 2310){
-        standardTime = 2000;
+        standardTime = '2000';
     } else if(2310 <= time){
-        standardTime = 2300;
+        standardTime = '2300';
     } else {
-        date = new Date(date.setDate(date.getDate() - 1));  //어제
-        standardTime = 2300;
+        date = new Date(new Date().setDate(new Date().getDate() - 1));  //어제
+        standardTime = '2300';
     }
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
