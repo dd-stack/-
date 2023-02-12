@@ -82,7 +82,6 @@ function onGeoOk(position){
     const minutes = ('0' + date.getMinutes()).slice(-2);
     const time = Number(hours + minutes);  //현재 시간
     let standardTime = 0000;
-    console.log(time)
     if(0210 <= time && time < 0510){
         standardTime = 0200;
     } else if(0510 <= time && time < 0810){
@@ -100,24 +99,32 @@ function onGeoOk(position){
     } else {
         standardTime = 2300;
     }
-    console.log(standardTime)
     const base_time = `${standardTime}`;  //발표 기준 시간으로 변환
     const payload = "serviceKey=" + API_KEY + "&dataType=json" + "&base_date=" + base_date + "&base_time=" + base_time + "&nx=" + X + "&ny=" + Y
+
+    const standardTime2 = base_time.slice(0, 2);
+    document.querySelector("#title").innerText = `${year}년 ${month}월 ${day}일 ${standardTime2}시 기준`;
 
     const url = vilage_weather_url + payload;
     console.log(url)
     fetch(url)
     .then(response => response.json())
     .then(data =>{
-        // const weather = document.querySelector("#weather span:first-child");
-        // const city = document.querySelector("#weather span:last-child");
-        // city.innerText = data.name;
-        // weather.innerText = `${data.weather[0].main} / ${data.main.temp} ℃`;
-        document.querySelector("#shelter").innerText = data.row[0].shel_nm;
+        const tmp = document.querySelector("#weather span:first-child");  //1시간 기온
+        const pty = document.querySelector("#weather span:last-child");  //강수형태(0-없음 1-비 2-비/눈 3-눈 4-소나기)
+        const 기온 = data.response.body.items.item[0].fcstValue;
+        const 강수 = data.response.body.items.item[6].fcstValue;
+        let 강수이모지 = '';
+        if(강수 === 1 || 강수 === 2 || 강수 === 4) {  //비오니까 우산 챙겨
+            강수이모지 = '🌂';
+        }
+        tmp.innerText = `${기온} ℃`
+        pty.innerText = 강수이모지;
     });
 }
 function onGeoError(){
-    alert("위치 정보를 허용하지 않으면 서울 정보가 표시됩니다.");
+    alert("위치 확인 권한을 허용해 주세요.");
+
 }
 
 navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
