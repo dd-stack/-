@@ -73,20 +73,16 @@ function onGeoOk(position){
     const Y = liveIn.y;  //Y좌표
 
     const vilage_weather_url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?"
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const day = ('0' + date.getDate()).slice(-2);
-    const base_date = `${year}${month}${day}`;  //출력 예시 => '20230212'
+    let date = new Date();
     const hours = ('0' + date.getHours()).slice(-2);
     const minutes = ('0' + date.getMinutes()).slice(-2);
     const time = Number(hours + minutes);  //현재 시간
-    let standardTime = 0000;
-    if(0210 <= time && time < 0510){
+    let standardTime = 0;
+    if(210 <= time && time < 510){
         standardTime = 0200;
-    } else if(0510 <= time && time < 0810){
+    } else if(510 <= time && time < 810){
         standardTime = 0500;
-    } else if(0810 <= time && time < 1110){
+    } else if(810 <= time && time < 1110){
         standardTime = 0800;
     } else if(1110 <= time && time < 1410){
         standardTime = 1100;
@@ -96,9 +92,16 @@ function onGeoOk(position){
         standardTime = 1700;
     } else if(2010 <= time && time < 2310){
         standardTime = 2000;
+    } else if(2310 <= time){
+        standardTime = 2300;
     } else {
+        date = new Date(date.setDate(date.getDate() - 1));  //어제
         standardTime = 2300;
     }
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const base_date = `${year}${month}${day}`;  //출력 예시 => '20230212'
     const base_time = `${standardTime}`;  //발표 기준 시간으로 변환
     const payload = "serviceKey=" + API_KEY + "&dataType=json" + "&base_date=" + base_date + "&base_time=" + base_time + "&nx=" + X + "&ny=" + Y
 
@@ -106,6 +109,7 @@ function onGeoOk(position){
     document.querySelector("#title").innerText = `${year}년 ${month}월 ${day}일 ${standardTime2}시 기준`;
 
     const url = vilage_weather_url + payload;
+    console.log(url);
     fetch(url)
     .then(response => response.json())
     .then(data =>{
@@ -115,8 +119,8 @@ function onGeoOk(position){
         const 강수 = data.response.body.items.item[7].fcstValue;
         let 강수이모지 = '';
         if(강수 >= 50) {  //강수확률 50% 이상
-            강수이모지 = '🌂';
-        }
+            강수이모지 = '☂️';
+        }강수이모지 = '☂️';
         tmp.innerText = `${기온} ℃`
         pop.innerText = 강수이모지;
     });
