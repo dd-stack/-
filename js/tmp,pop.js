@@ -77,7 +77,6 @@ function onGeoOk(position){
     const hours = ('0' + date.getHours()).slice(-2);
     const minutes = ('0' + date.getMinutes()).slice(-2);
     const time = Number(hours + minutes);  //현재 시간
-    console.log(time)
     let standardTime = '';  //왜 숫자로 할당하면 오류가 발생할까?
     if(210 <= time && time < 510){
         standardTime = '0200';
@@ -110,7 +109,6 @@ function onGeoOk(position){
     document.querySelector("#title").innerText = `${year}년 ${month}월 ${day}일 ${standardTime2}시 기준`;
 
     const url = vilage_weather_url + payload;
-    console.log(url);
     fetch(url)
     .then(response => response.json())
     .then(data =>{
