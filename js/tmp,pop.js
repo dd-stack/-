@@ -116,13 +116,13 @@ function onGeoOk(position){
     .then(data =>{
         const tmp = document.querySelector("#weather span:first-child");  //1시간 기온
         const pop = document.querySelector("#weather span:nth-child(2)");  //강수확률
-        const 기온 = data.response.body.items.item[0].fcstValue;
-        const 강수 = data.response.body.items.item[7].fcstValue;
+        const 기온 = data.response.body.items.item[0].fcstValue;  //1시간 기온
+        const 강수 = data.response.body.items.item[7].fcstValue;  //강수확률
         let 강수이모지 = '';
         if(강수 >= 50) {  //강수확률 50% 이상
             강수이모지 = '☂️';
-        }강수이모지 = '☂️';
-        tmp.innerText = `${기온} ℃`
+        } 강수이모지 = '🌈';
+        tmp.innerText = `${기온}℃`
         pop.innerText = 강수이모지;
     });
 }
