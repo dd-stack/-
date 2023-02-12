@@ -111,15 +111,15 @@ function onGeoOk(position){
     .then(response => response.json())
     .then(data =>{
         const tmp = document.querySelector("#weather span:first-child");  //1시간 기온
-        const pty = document.querySelector("#weather span:last-child");  //강수형태(0-없음 1-비 2-비/눈 3-눈 4-소나기)
+        const pop = document.querySelector("#weather span:last-child");  //강수확률
         const 기온 = data.response.body.items.item[0].fcstValue;
-        const 강수 = data.response.body.items.item[6].fcstValue;
+        const 강수 = data.response.body.items.item[7].fcstValue;
         let 강수이모지 = '';
-        if(강수 === 1 || 강수 === 2 || 강수 === 4) {  //비오니까 우산 챙겨
+        if(강수 >= 50) {  //강수확률 50% 이상
             강수이모지 = '🌂';
         }
         tmp.innerText = `${기온} ℃`
-        pty.innerText = 강수이모지;
+        pop.innerText = 강수이모지;
     });
 }
 function onGeoError(){
