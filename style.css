@@ -50,7 +50,7 @@ h1{
     text-shadow: #D0B8A8 2px 5px;
 }
 #weather{
-    border: 1pt solid black;
+    border: 1pt solid #574940;
     font-size: 14pt;
     color: #574940;
     font-weight: 550;
@@ -65,7 +65,7 @@ h1{
     margin-left: 10px;
 }
 .dress{
-    border: 1pt solid black;
+    border: 1pt solid #574940;
     height: 360px;
     width: 360px;
 }
