@@ -12,6 +12,10 @@ body {
     align-items: center;
     background-color: #DFD3C3;
 }
+img {
+    height: 360px;
+    width: 360px;
+}
 .main{
     height: 600px;
     width: 400px;

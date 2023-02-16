@@ -68,7 +68,7 @@ function dfs_xy_conv(code, v1, v2) {  //기상청 격자 <-> 위경도 변환 �
 function onGeoOk(position){
     const lat = position.coords.latitude;  //위도
     const lon = position.coords.longitude;  //경도   
-    let liveIn = dfs_xy_conv("toXY", lat, lon)
+    const liveIn = dfs_xy_conv("toXY", lat, lon)
     const X = liveIn.x;  //X좌표
     const Y = liveIn.y;  //Y좌표
 
@@ -122,6 +122,25 @@ function onGeoOk(position){
         } 강수이모지 = '🌈';
         tmp.innerText = `${기온}℃`
         pop.innerText = 강수이모지;
+        // 이미지의 src 속성을 기온에 따라 변경
+        const image = document.querySelector("#image");
+        if(기온 >= 28){
+            image.src = "img/여름1.png";
+        } else if(기온 >= 23 && 기온 < 28){
+            image.src = "img/여름2.png";
+        } else if(기온 >= 20 && 기온 < 23){
+            image.src = "img/봄1.png";
+        } else if(기온 >= 17 && 기온 < 20){
+            image.src = "img/봄2.png";
+        } else if(기온 >= 12 && 기온 < 17){
+            image.src = "img/가을1.png";
+        } else if(기온 >= 9 && 기온 < 12){
+            image.src = "img/가을2.png";
+        } else if(기온 >= 5 && 기온 < 9){
+            image.src = "img/겨울1.png";
+        } else if(기온 < 5){
+            image.src = "img/겨울2.png";
+        }
     });
 }
 function onGeoError(){
