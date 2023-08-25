@@ -77,7 +77,7 @@ function onGeoOk(position) {
   const hours = ("0" + date.getHours()).slice(-2);
   const minutes = ("0" + date.getMinutes()).slice(-2);
   const time = Number(hours + minutes); //현재 시간
-  let standardTime = ""; //왜 숫자로 할당하면 오류가 발생할까?
+  let standardTime = "";
   if (210 <= time && time < 510) {
     standardTime = "0200";
   } else if (510 <= time && time < 810) {
@@ -128,13 +128,16 @@ function onGeoOk(position) {
       const tmp = document.querySelector("#weather span:first-child"); //1시간 기온
       const pop = document.querySelector("#weather span:nth-child(2)"); //강수확률
       const 기온 = data.response.body.items.item[0].fcstValue; //1시간 기온
-      const 강수 = data.response.body.items.item[7].fcstValue; //강수확률
+      const 강수확률 = data.response.body.items.item[7].fcstValue; //강수확률
+      const 강수형태 = data.response.body.items.item[8].fcstValue; //강수형태
       let 강수이모지 = "";
-      if (강수 >= 50) {
-        //강수확률 50% 이상
+      if (강수확률 >= 50 || [1, 2, 3, 4].includes(강수형태)) {
+        //강수확률 50% 이상이거나
+        //강수형태가 0(강수없음)이 아닐 때 (비: 1, 비/눈: 2, 눈: 3, 소나기: 4)
         강수이모지 = "☂️";
+      } else {
+        강수이모지 = "🌈";
       }
-      강수이모지 = "🌈";
       tmp.innerText = `${기온}℃`;
       pop.innerText = 강수이모지;
       // 이미지의 src 속성을 기온에 따라 변경
@@ -158,6 +161,7 @@ function onGeoOk(position) {
       }
     });
 }
+
 function onGeoError() {
   alert("위치 확인 권한을 허용해 주세요.");
 }
