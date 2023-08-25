@@ -126,7 +126,7 @@ function onGeoOk(position) {
     .then((response) => response.json())
     .then((data) => {
       const tmp = document.querySelector("#weather span:first-child"); //1시간 기온
-      const pop = document.querySelector("#weather span:nth-child(2)"); //강수확률
+      const pop = document.querySelector("#weather span:nth-child(2)"); //강수확률, 강수형태
       const 기온 = data.response.body.items.item[0].fcstValue; //1시간 기온
       const 강수확률 = data.response.body.items.item[7].fcstValue; //강수확률
       const 강수형태 = data.response.body.items.item[8].fcstValue; //강수형태
