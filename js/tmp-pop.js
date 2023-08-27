@@ -67,21 +67,21 @@ function onGeoOk(position) {
       // 이미지의 src 속성을 기온에 따라 변경
       const image = document.querySelector("#image");
       if (기온 >= 28) {
-        image.src = "./img/summer1.png";
+        image.src = "../img/summer1.png";
       } else if (기온 >= 23 && 기온 < 28) {
-        image.src = "./img/summer2.png";
+        image.src = "../img/summer2.png";
       } else if (기온 >= 20 && 기온 < 23) {
-        image.src = "./img/spring1.png";
+        image.src = "../img/spring1.png";
       } else if (기온 >= 17 && 기온 < 20) {
-        image.src = "./img/spring2.png";
+        image.src = "../img/spring2.png";
       } else if (기온 >= 12 && 기온 < 17) {
-        image.src = "./img/fall1.png";
+        image.src = "../img/fall1.png";
       } else if (기온 >= 9 && 기온 < 12) {
-        image.src = "./img/fall2.png";
+        image.src = "../img/fall2.png";
       } else if (기온 >= 5 && 기온 < 9) {
-        image.src = "./img/winter1.png";
+        image.src = "../img/winter1.png";
       } else if (기온 < 5) {
-        image.src = "./img/winter2.png";
+        image.src = "../img/winter2.png";
       }
     }
     if (response === "fail") {
