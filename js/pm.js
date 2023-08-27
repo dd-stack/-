@@ -1,10 +1,8 @@
-// 환경 변수
-require("dotenv").config();
-
-const API_KEY = process.env.API_KEY;
-const API_KEY2 = process.env.API_KEY2;
-const CONSUMER_KEY = process.env.CONSUMER_KEY;
-const CONSUMER_SECRET = process.env.CONSUMER_SECRET;
+// 비공개 API 키
+const API_KEY1 = "";
+const API_KEY2 = "";
+const CONSUMER_KEY = "";
+const CONSUMER_SECRET = "";
 
 // 아래부터 읽어야 이해하기 편함
 
@@ -17,7 +15,7 @@ function getMsrstnAcctoRltmMesureDnsty(msrstn) {
     "&dataTerm=DAILY" +
     "&returnType=json" +
     "&serviceKey=" +
-    API_KEY +
+    API_KEY1 +
     "&ver=1.0";
   const url = dust_url + dust_payload;
 

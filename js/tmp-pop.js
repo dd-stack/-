@@ -1,7 +1,5 @@
-// 환경 변수
-require("dotenv").config();
-
-const API_KEY = process.env.API_KEY;
+// 비공개 API 키
+const API_KEY = "";
 
 // 위부터 읽어야 이해하기 편함
 
