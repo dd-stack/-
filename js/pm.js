@@ -16,7 +16,7 @@ function getMsrstnDust(msrstn) {
 
       let 미세먼지이모지 = "";
       if (미세먼지 > 2 || 초미세먼지 > 2) {
-        //미세먼지나 초미세먼지가 나쁨, 매우나쁨인 경우
+        // 미세먼지나 초미세먼지가 나쁨, 매우나쁨인 경우
         미세먼지이모지 = "😷";
       } else {
         미세먼지이모지 = "😊";
@@ -31,8 +31,8 @@ function getMsrstnDust(msrstn) {
 
 // 액세스 토큰 발급 -> 위경도-TM 좌표 변환 -> 근접 측정소 목록 조회
 function onGeoOk(position) {
-  const lat = position.coords.latitude; //위도(y)
-  const lon = position.coords.longitude; //경도(x)
+  const lat = position.coords.latitude; // 위도(y)
+  const lon = position.coords.longitude; // 경도(x)
 
   // 액세스 토큰 발급
   getToken().then((response) => {

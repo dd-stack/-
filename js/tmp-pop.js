@@ -2,16 +2,16 @@ import dfs_xy_conv from "../util/dfs_xy_conv.js";
 import { getVilageWeather } from "../api/getVilageWeather.js";
 
 function onGeoOk(position) {
-  const lat = position.coords.latitude; //위도
-  const lon = position.coords.longitude; //경도
+  const lat = position.coords.latitude; // 위도
+  const lon = position.coords.longitude; // 경도
   const liveIn = dfs_xy_conv("toXY", lat, lon);
-  const X = liveIn.x; //X좌표
-  const Y = liveIn.y; //Y좌표
+  const X = liveIn.x; // X좌표
+  const Y = liveIn.y; // Y좌표
 
   let date = new Date();
   const hours = ("0" + date.getHours()).slice(-2);
   const minutes = ("0" + date.getMinutes()).slice(-2);
-  const time = Number(hours + minutes); //현재 시간
+  const time = Number(hours + minutes); // 현재 시간
 
   let standardTime = "";
   if (210 <= time && time < 510) {
@@ -31,15 +31,15 @@ function onGeoOk(position) {
   } else if (2310 <= time) {
     standardTime = "2300";
   } else {
-    date = new Date(new Date().setDate(new Date().getDate() - 1)); //어제
+    date = new Date(new Date().setDate(new Date().getDate() - 1)); // 어제
     standardTime = "2300";
   }
 
   const year = date.getFullYear();
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
   const day = ("0" + date.getDate()).slice(-2);
-  const base_date = `${year}${month}${day}`; //출력 예시 => '20230212'
-  const base_time = `${standardTime}`; //발표 기준 시간으로 변환
+  const base_date = `${year}${month}${day}`; // 출력 예시 => '20230212'
+  const base_time = `${standardTime}`; // 발표 기준 시간으로 변환
 
   document.querySelector(
     "#standardTime"
@@ -49,14 +49,14 @@ function onGeoOk(position) {
     if (response !== "fail") {
       const tmp = document.querySelector("#weather span:first-child");
       const pop = document.querySelector("#weather span:nth-child(2)");
-      const 기온 = response.response.body.items.item[0].fcstValue; //1시간 기온
+      const 기온 = response.response.body.items.item[0].fcstValue; // 1시간 기온
       const 강수확률 = response.response.body.items.item[7].fcstValue;
       const 강수형태 = response.response.body.items.item[8].fcstValue;
 
       let 강수이모지 = "";
       if (강수확률 >= 50 || [1, 2, 3, 4].includes(강수형태)) {
-        //강수확률 50% 이상이거나
-        //강수형태가 0(강수없음)이 아닐 때 (비: 1, 비/눈: 2, 눈: 3, 소나기: 4)
+        // 강수확률 50% 이상이거나
+        // 강수형태가 0(강수없음)이 아닐 때 (비: 1, 비/눈: 2, 눈: 3, 소나기: 4)
         강수이모지 = "☂️";
       } else {
         강수이모지 = "🌈";
