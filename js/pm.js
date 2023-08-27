@@ -1,26 +1,18 @@
-// 아래부터 읽어야 이해하기 편함
+import {
+  getToken,
+  xy_tmxy_trans,
+  getNearbyMsrstnList,
+  getMsrstnAcctoRltmMesureDnsty,
+} from "../api/getMsrstnDust";
 
-function getMsrstnAcctoRltmMesureDnsty(msrstn) {
-  const dust_url =
-    "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?";
-  const dust_payload =
-    "stationName=" +
-    msrstn +
-    "&dataTerm=DAILY" +
-    "&returnType=json" +
-    "&serviceKey=" +
-    import.meta.env.VITE_API_KEY +
-    "&ver=1.0";
-  const url = dust_url + dust_payload;
-
-  // 미세먼지 정보 조회
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
+// 측정소 기준 미세먼지 정보 조회
+function getMsrstnDust(msrstn) {
+  getMsrstnAcctoRltmMesureDnsty(msrstn).then((response) => {
+    if (response !== "fail") {
       const pm = document.querySelector("#weather span:last-child");
       // 가장 최근 정보 (좋음: 1, 보통: 2, 나쁨: 3, 매우나쁨: 4)
-      const 미세먼지 = data.response.body.items[0].pm10Grade;
-      const 초미세먼지 = data.response.body.items[0].pm25Grade;
+      const 미세먼지 = response.response.body.items[0].pm10Grade;
+      const 초미세먼지 = response.response.body.items[0].pm25Grade;
 
       let 미세먼지이모지 = "";
       if (미세먼지 > 2 || 초미세먼지 > 2) {
@@ -30,88 +22,57 @@ function getMsrstnAcctoRltmMesureDnsty(msrstn) {
         미세먼지이모지 = "😊";
       }
       pm.innerText = 미세먼지이모지;
-    })
-    .catch((error) => {
-      console.error(error);
+    }
+    if (response === "fail") {
       return alert("미세먼지 정보를 가져오지 못했습니다.");
-    });
+    }
+  });
 }
 
-// 근접 측정소 목록 조회 후 미세먼지 정보 조회
-function getNearbyMsrstnList(tmX, tmY) {
-  const msrstn_url = "http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList?";
-  const msrstn_payload =
-    "tmX=" +
-    tmX +
-    "&tmY=" +
-    tmY +
-    "&returnType=json" +
-    "&serviceKey=" +
-    import.meta.env.VITE_API_KEY2;
-  const url = msrstn_url + msrstn_payload;
-
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      const msrstn = data.response.body.items[0].stationName;
-      getMsrstnAcctoRltmMesureDnsty(msrstn);
-    })
-    .catch((error) => {
-      console.error(error);
-      getMsrstnAcctoRltmMesureDnsty("종로구");
-      return alert(
-        "가까운 미세먼지 측정소 조회에 실패했습니다. 종로구 기준으로 미세먼지가 표시됩니다."
-      );
-    });
-}
-
-// 위경도 -> TM 좌표 변환 후 근접 측정소 목록 조회
-function xy_tmxy_trans(access_token, lat, lon) {
-  const trans_url = "https://sgisapi.kostat.go.kr/OpenAPI3/transformation/transcoord.json?";
-  const trans_payload =
-    "src=4326&dst=5181" + "&posX=" + lon + "&posY=" + lat + "&accessToken=" + access_token;
-  const url = trans_url + trans_payload;
-
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      const tmX = data.result.posX;
-      const tmY = data.result.posY;
-      getNearbyMsrstnList(tmX, tmY);
-    })
-    .catch((error) => {
-      console.error(error);
-      getMsrstnAcctoRltmMesureDnsty("종로구");
-      return alert("TM 좌표 변환 api 호출에 실패했습니다. 종로구 기준으로 미세먼지가 표시됩니다.");
-    });
-}
-
+// 액세스 토큰 발급 -> 위경도-TM 좌표 변환 -> 근접 측정소 목록 조회
 function onGeoOk(position) {
   const lat = position.coords.latitude; //위도(y)
   const lon = position.coords.longitude; //경도(x)
 
-  const auth_url = "https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?";
-  const auth_payload =
-    "consumer_key=" +
-    import.meta.env.VITE_CONSUMER_KEY +
-    "&consumer_secret=" +
-    import.meta.env.VITE_CONSUMER_SECRET;
-  const url = auth_url + auth_payload;
-
-  // 액세스 토큰 발급 후 위경도 -> TM 좌표 변환
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      const access_token = data.result.accessToken;
-      xy_tmxy_trans(access_token, lat, lon);
-    })
-    .catch((error) => {
-      console.error(error);
-      getMsrstnAcctoRltmMesureDnsty("종로구");
+  // 액세스 토큰 발급
+  getToken().then((response) => {
+    if (response !== "fail") {
+      const access_token = response.result.accessToken;
+      // 위경도-TM 좌표 변환
+      xy_tmxy_trans(access_token, lat, lon).then((response) => {
+        if (response !== "fail") {
+          const tmX = response.result.posX;
+          const tmY = response.result.posY;
+          // 근접 측정소 목록 조회
+          getNearbyMsrstnList(tmX, tmY).then((response) => {
+            if (response !== "fail") {
+              // 가장 가까운 측정소 이름
+              const msrstn = response.response.body.items[0].stationName;
+              getMsrstnDust(msrstn);
+            }
+            if (response === "fail") {
+              getMsrstnDust("종로구");
+              return alert(
+                "가까운 미세먼지 측정소 조회에 실패했습니다. 종로구 기준으로 미세먼지가 표시됩니다."
+              );
+            }
+          });
+        }
+        if (response === "fail") {
+          getMsrstnDust("종로구");
+          return alert(
+            "TM 좌표 변환 api 호출에 실패했습니다. 종로구 기준으로 미세먼지가 표시됩니다."
+          );
+        }
+      });
+    }
+    if (response === "fail") {
+      getMsrstnDust("종로구");
       return alert(
         "TM 좌표 변환 api용 액세스 토큰 발급에 실패했습니다. 종로구 기준으로 미세먼지가 표시됩니다."
       );
-    });
+    }
+  });
 }
 
 function onGeoError() {
