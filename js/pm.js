@@ -1,9 +1,3 @@
-// 비공개 API 키
-const API_KEY1 = "";
-const API_KEY2 = "";
-const CONSUMER_KEY = "";
-const CONSUMER_SECRET = "";
-
 // 아래부터 읽어야 이해하기 편함
 
 function getMsrstnAcctoRltmMesureDnsty(msrstn) {
@@ -15,7 +9,7 @@ function getMsrstnAcctoRltmMesureDnsty(msrstn) {
     "&dataTerm=DAILY" +
     "&returnType=json" +
     "&serviceKey=" +
-    API_KEY1 +
+    import.meta.env.VITE_API_KEY +
     "&ver=1.0";
   const url = dust_url + dust_payload;
 
@@ -24,8 +18,9 @@ function getMsrstnAcctoRltmMesureDnsty(msrstn) {
     .then((response) => response.json())
     .then((data) => {
       const pm = document.querySelector("#weather span:last-child");
-      const 미세먼지 = data.response.body.items[0].pm10Grade; // 가장 최근 정보 (좋음: 1, 보통: 2, 나쁨: 3, 매우나쁨: 4)
-      const 초미세먼지 = data.response.body.items[0].pm25Grade; // 가장 최근 정보 (좋음: 1, 보통: 2, 나쁨: 3, 매우나쁨: 4)
+      // 가장 최근 정보 (좋음: 1, 보통: 2, 나쁨: 3, 매우나쁨: 4)
+      const 미세먼지 = data.response.body.items[0].pm10Grade;
+      const 초미세먼지 = data.response.body.items[0].pm25Grade;
 
       let 미세먼지이모지 = "";
       if (미세먼지 > 2 || 초미세먼지 > 2) {
@@ -46,7 +41,13 @@ function getMsrstnAcctoRltmMesureDnsty(msrstn) {
 function getNearbyMsrstnList(tmX, tmY) {
   const msrstn_url = "http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList?";
   const msrstn_payload =
-    "tmX=" + tmX + "&tmY=" + tmY + "&returnType=json" + "&serviceKey=" + API_KEY2;
+    "tmX=" +
+    tmX +
+    "&tmY=" +
+    tmY +
+    "&returnType=json" +
+    "&serviceKey=" +
+    import.meta.env.VITE_API_KEY2;
   const url = msrstn_url + msrstn_payload;
 
   fetch(url)
@@ -90,7 +91,11 @@ function onGeoOk(position) {
   const lon = position.coords.longitude; //경도(x)
 
   const auth_url = "https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?";
-  const auth_payload = "consumer_key=" + CONSUMER_KEY + "&consumer_secret=" + CONSUMER_SECRET;
+  const auth_payload =
+    "consumer_key=" +
+    import.meta.env.VITE_CONSUMER_KEY +
+    "&consumer_secret=" +
+    import.meta.env.VITE_CONSUMER_SECRET;
   const url = auth_url + auth_payload;
 
   // 액세스 토큰 발급 후 위경도 -> TM 좌표 변환

@@ -1,6 +1,3 @@
-// 비공개 API 키
-const API_KEY = "";
-
 // 위부터 읽어야 이해하기 편함
 
 var RE = 6371.00877; // 지구 반경(km)
@@ -108,7 +105,7 @@ function onGeoOk(position) {
 
   const vilage_weather_payload =
     "serviceKey=" +
-    API_KEY +
+    import.meta.env.VITE_API_KEY +
     "&dataType=json" +
     "&base_date=" +
     base_date +

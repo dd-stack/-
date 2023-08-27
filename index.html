@@ -9,26 +9,15 @@
       name="description"
       content="온도에 따른 적절한 옷차림과 강수확률, 미세먼지 정보를 표시합니다."
     />
-    <link rel="icon" href="./img/파비콘/hanger-icon.png" />
+    <link rel="icon" type="image" href="/hanger-icon.png" />
     <meta
       property="og:image"
       content="https://github.com/dd-stack/dress-for-the-weather/blob/main/img/hanger-icon.png?raw=true"
     />
     <title>날씨별 추천 옷차림</title>
-    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div class="main">
-      <span id="standardTime"></span>
-      <h1>날씨별 추천 옷차림</h1>
-      <div id="weather">
-        <span id="temp"></span>
-        <span class="icon"></span>
-        <span class="icon"></span>
-      </div>
-      <img id="image" src="" />
-    </div>
-    <script src="./js/tmp-pop.js"></script>
-    <script src="./js/pm.js"></script>
+    <div id="app"></div>
+    <script type="module" src="/main.js"></script>
   </body>
 </html>
