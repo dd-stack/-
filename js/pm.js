@@ -1,3 +1,11 @@
+// 환경 변수
+require("dotenv").config();
+
+const API_KEY = process.env.API_KEY;
+const API_KEY2 = process.env.API_KEY2;
+const CONSUMER_KEY = process.env.CONSUMER_KEY;
+const CONSUMER_SECRET = process.env.CONSUMER_SECRET;
+
 // 아래부터 읽어야 이해하기 편함
 
 function getMsrstnAcctoRltmMesureDnsty(msrstn) {
@@ -9,7 +17,7 @@ function getMsrstnAcctoRltmMesureDnsty(msrstn) {
     "&dataTerm=DAILY" +
     "&returnType=json" +
     "&serviceKey=" +
-    API_KEY1 +
+    API_KEY +
     "&ver=1.0";
   const url = dust_url + dust_payload;
 
@@ -84,7 +92,7 @@ function onGeoOk(position) {
   const lon = position.coords.longitude; //경도(x)
 
   const auth_url = "https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?";
-  const auth_payload = "consumer_key=" + consumer_key + "&consumer_secret=" + consumer_secret;
+  const auth_payload = "consumer_key=" + CONSUMER_KEY + "&consumer_secret=" + CONSUMER_SECRET;
   const url = auth_url + auth_payload;
 
   // 액세스 토큰 발급 후 위경도 -> TM 좌표 변환

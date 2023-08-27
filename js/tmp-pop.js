@@ -1,3 +1,8 @@
+// 환경 변수
+require("dotenv").config();
+
+const API_KEY = process.env.API_KEY;
+
 // 위부터 읽어야 이해하기 편함
 
 var RE = 6371.00877; // 지구 반경(km)
