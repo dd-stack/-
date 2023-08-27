@@ -50,8 +50,8 @@ function onGeoOk(position) {
       const tmp = document.querySelector("#weather span:first-child");
       const pop = document.querySelector("#weather span:nth-child(2)");
       const 기온 = response.response.body.items.item[0].fcstValue; //1시간 기온
-      const 강수확률 = response.response.body.items.item[7].fcstValue; //강수확률
-      const 강수형태 = response.response.body.items.item[8].fcstValue; //강수형태
+      const 강수확률 = response.response.body.items.item[7].fcstValue;
+      const 강수형태 = response.response.body.items.item[8].fcstValue;
 
       let 강수이모지 = "";
       if (강수확률 >= 50 || [1, 2, 3, 4].includes(강수형태)) {
@@ -67,21 +67,21 @@ function onGeoOk(position) {
       // 이미지의 src 속성을 기온에 따라 변경
       const image = document.querySelector("#image");
       if (기온 >= 28) {
-        image.src = "./img/여름1.png";
+        image.src = "./img/summer1.png";
       } else if (기온 >= 23 && 기온 < 28) {
-        image.src = "./img/여름2.png";
+        image.src = "./img/summer2.png";
       } else if (기온 >= 20 && 기온 < 23) {
-        image.src = "./img/봄1.png";
+        image.src = "./img/spring1.png";
       } else if (기온 >= 17 && 기온 < 20) {
-        image.src = "./img/봄2.png";
+        image.src = "./img/spring2.png";
       } else if (기온 >= 12 && 기온 < 17) {
-        image.src = "./img/가을1.png";
+        image.src = "./img/fall1.png";
       } else if (기온 >= 9 && 기온 < 12) {
-        image.src = "./img/가을2.png";
+        image.src = "./img/fall2.png";
       } else if (기온 >= 5 && 기온 < 9) {
-        image.src = "./img/겨울1.png";
+        image.src = "./img/winter1.png";
       } else if (기온 < 5) {
-        image.src = "./img/겨울2.png";
+        image.src = "./img/winter2.png";
       }
     }
     if (response === "fail") {
