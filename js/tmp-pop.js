@@ -1,5 +1,4 @@
-const API_KEY =
-  "XhFSfYgaP9EhpQ0Gnc0G4m1T9N1vOEGUwxA99%2BZa%2Bvgfv8W8noI75dshtF25Jbwt6MVy1rBMk%2FG2ixt4XdnNtw%3D%3D";
+// 위부터 읽어야 이해하기 편함
 
 var RE = 6371.00877; // 지구 반경(km)
 var GRID = 5.0; // 격자 간격(km)
@@ -10,7 +9,7 @@ var OLAT = 38.0; // 기준점 위도(degree)
 var XO = 43; // 기준점 X좌표(GRID)
 var YO = 136; // 기1준점 Y좌표(GRID)
 
-// 기상청 격자 <-> 위경도 변환 함수 ( code : "toXY"(위경도->좌표, v1:위도, v2:경도), "toLL"(좌표->위경도,v1:x, v2:y) )
+// 기상청 격자 <-> 위경도 변환 함수 ( code : "toXY"(위경도->좌표, v1:위도, v2:경도), "toLL"(좌표->위경도, v1:x, v2:y) )
 function dfs_xy_conv(code, v1, v2) {
   var DEGRAD = Math.PI / 180.0;
   var RADDEG = 180.0 / Math.PI;
@@ -71,12 +70,11 @@ function onGeoOk(position) {
   const X = liveIn.x; //X좌표
   const Y = liveIn.y; //Y좌표
 
-  const vilage_weather_url =
-    "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?";
   let date = new Date();
   const hours = ("0" + date.getHours()).slice(-2);
   const minutes = ("0" + date.getMinutes()).slice(-2);
   const time = Number(hours + minutes); //현재 시간
+
   let standardTime = "";
   if (210 <= time && time < 510) {
     standardTime = "0200";
@@ -98,12 +96,14 @@ function onGeoOk(position) {
     date = new Date(new Date().setDate(new Date().getDate() - 1)); //어제
     standardTime = "2300";
   }
+
   const year = date.getFullYear();
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
   const day = ("0" + date.getDate()).slice(-2);
   const base_date = `${year}${month}${day}`; //출력 예시 => '20230212'
   const base_time = `${standardTime}`; //발표 기준 시간으로 변환
-  const payload =
+
+  const vilage_weather_payload =
     "serviceKey=" +
     API_KEY +
     "&dataType=json" +
@@ -121,7 +121,10 @@ function onGeoOk(position) {
     "#standardTime"
   ).innerText = `${year}년 ${month}월 ${day}일 ${standardTime2}시 기준`;
 
-  const url = vilage_weather_url + payload;
+  const vilage_weather_url =
+    "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?";
+  const url = vilage_weather_url + vilage_weather_payload;
+
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
@@ -130,6 +133,7 @@ function onGeoOk(position) {
       const 기온 = data.response.body.items.item[0].fcstValue; //1시간 기온
       const 강수확률 = data.response.body.items.item[7].fcstValue; //강수확률
       const 강수형태 = data.response.body.items.item[8].fcstValue; //강수형태
+
       let 강수이모지 = "";
       if (강수확률 >= 50 || [1, 2, 3, 4].includes(강수형태)) {
         //강수확률 50% 이상이거나
@@ -140,6 +144,7 @@ function onGeoOk(position) {
       }
       tmp.innerText = `${기온}℃`;
       pop.innerText = 강수이모지;
+
       // 이미지의 src 속성을 기온에 따라 변경
       const image = document.querySelector("#image");
       if (기온 >= 28) {
@@ -159,6 +164,10 @@ function onGeoOk(position) {
       } else if (기온 < 5) {
         image.src = "img/겨울2.png";
       }
+    })
+    .catch((error) => {
+      console.error(error);
+      return alert("날씨 정보(온도, 강수)를 가져오지 못했습니다.");
     });
 }
 
