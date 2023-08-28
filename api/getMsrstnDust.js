@@ -40,11 +40,11 @@ export const getNearbyMsrstnList = async (tmX, tmY) => {
     tmY +
     "&returnType=json" +
     "&serviceKey=" +
-    import.meta.env.VITE_API_KEY2;
+    import.meta.env.VITE_API_KEY;
   const url = msrstn_url + msrstn_payload;
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { method: "POST" });
     return response.json();
   } catch (error) {
     console.error(error);
